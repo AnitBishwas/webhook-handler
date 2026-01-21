@@ -24,7 +24,7 @@
       "secrets": [
         {
           "name": "PORT",
-          "valueFrom": "8080"
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:PORT::"
         },
         {
           "name": "SHOPIFY_API_KEY",
