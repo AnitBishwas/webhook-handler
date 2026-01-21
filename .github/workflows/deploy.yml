@@ -33,7 +33,7 @@ jobs:
         run: |
           IMAGE_URI=${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}
 
-
+          --build-arg NPM_TOKEN=${{ secrets.NPM_TOKEN }}
           docker build -t $IMAGE_URI:latest .
           docker push $IMAGE_URI:latest
 
