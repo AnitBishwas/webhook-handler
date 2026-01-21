@@ -31,10 +31,8 @@ jobs:
       - name: Build and push Docker image
         id: build-image
         run: |
-          IMAGE_URI=$(aws ecr describe-repositories \
-            --repository-names $ECR_REPOSITORY \
-            --query 'repositories[0].repositoryUri' \
-            --output text)
+          IMAGE_URI=${{ secrets.ECR_REGISTRY }}/${{ secrets.ECR_REPOSITORY }}
+
 
           docker build -t $IMAGE_URI:latest .
           docker push $IMAGE_URI:latest
