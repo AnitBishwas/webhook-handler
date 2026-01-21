@@ -46,15 +46,17 @@ jobs:
             echo "image=$IMAGE_URI:latest" >> $GITHUB_OUTPUT
 
       - name: Render ECS task definition
+        id: render
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ecs-task-definition.json
-          container-name: node-app
-          image: ${{ steps.build-image.outputs.image }}
+            task-definition: ecs-task-definition.json   # local file in repo
+            container-name: node-app
+            image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          cluster: ${{ env.ECS_CLUSTER }}
-          service: ${{ env.ECS_SERVICE }}
-          wait-for-service-stability: true
+            cluster: ${{ env.ECS_CLUSTER }}
+            service: ${{ env.ECS_SERVICE }}
+            task-definition: ${{ steps.render.outputs.task-definition }}
+            wait-for-service-stability: true
