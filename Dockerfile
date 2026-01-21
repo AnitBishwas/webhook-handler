@@ -12,7 +12,8 @@ COPY . .
 ARG NPM_TOKEN
 
 # Create npm config inside container
-RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+RUN RUN echo "@swiss-beauty:registry=https://registry.npmjs.org/" > .npmrc \
+ && echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
 
 ARG SHOPIFY_API_KEY
 ARG SHOPIFY_APP_URL
