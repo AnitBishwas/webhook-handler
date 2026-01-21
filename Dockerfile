@@ -8,6 +8,12 @@ WORKDIR /app
 # Copy everthing from root directory
 COPY . .
 
+# Accept token at build time
+ARG NPM_TOKEN
+
+# Create npm config inside container
+RUN echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+
 ARG SHOPIFY_API_KEY
 ARG SHOPIFY_APP_URL
 ARG VITE_SHOPIFY_API_KEY
@@ -18,6 +24,9 @@ ENV VITE_SHOPIFY_API_KEY=$VITE_SHOPIFY_API_KEY
 
 
 RUN npm install && npm run build
+
+# Remove token after install
+RUN rm -f .npmrc
 
 RUN ls -la
 # Expose backend port
