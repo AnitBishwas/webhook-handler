@@ -40,6 +40,8 @@ const createServer = async (root = process.cwd()) => {
   const app = Express();
   app.disable("x-powered-by");
 
+  // Health check route
+  app.get("/health",(req,res) => res.send('OK'));
   // Incoming webhook requests
   app.post(
     "/api/webhooks/*webhookTopic",
