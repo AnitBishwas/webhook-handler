@@ -25,7 +25,6 @@ import checkoutRoutes from "./routes/checkout/index.js";
 import userRoutes from "./routes/index.js";
 import webhookHandler from "./webhooks/_index.js";
 
-console.log('ENV CHECK:', process.env);
 setupCheck(); // Run a check to ensure everything is setup properly
 
 const PORT = parseInt(process.env.PORT, 10) || 8081;
