@@ -1,45 +1,166 @@
 {
-    "family": "node-ecs-task",
-    "containerDefinitions": [
+  "taskDefinitionArn": "arn:aws:ecs:ap-south-1:476114140918:task-definition/node-ecs-task:17",
+  "containerDefinitions": [
+    {
+      "name": "node-app",
+      "image": "476114140918.dkr.ecr.ap-south-1.amazonaws.com/webhook-handler-container:latest",
+      "cpu": 0,
+      "portMappings": [
         {
-            "name": "node-app",
-            "image": "IMAGE_URI",
-            "cpu": 0,
-            "portMappings": [
-                {
-                    "containerPort": 8080,
-                    "hostPort": 8080,
-                    "protocol": "tcp"
-                }
-            ],
-            "essential": true,
-            "environment": [
-                {
-                    "name": "NODE_ENV",
-                    "value": "production"
-                }
-            ],
-            "mountPoints": [],
-            "volumesFrom": [],
-            "logConfiguration": {
-                "logDriver": "awslogs",
-                "options": {
-                    "awslogs-group": "/ecs/node-ecs-app",
-                    "awslogs-region": "ap-south-1",
-                    "awslogs-stream-prefix": "ecs"
-                }
-            },
-            "systemControls": []
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
         }
-    ],
-    "taskRoleArn": "arn:aws:iam::476114140918:role/ecsTaskRole",
-    "executionRoleArn": "arn:aws:iam::476114140918:role/ecsTaskExecutionRole",
-    "networkMode": "awsvpc",
-    "volumes": [],
-    "placementConstraints": [],
-    "requiresCompatibilities": [
-        "FARGATE"
-    ],
-    "cpu": "256",
-    "memory": "512"
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        }
+      ],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "secrets": [
+        {
+          "name": "PORT",
+          "valueFrom": "8080"
+        },
+        {
+          "name": "SHOPIFY_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:SHOPIFY_API_KEY::"
+        },
+        {
+          "name": "SHOPIFY_API_SECRET",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:SHOPIFY_API_SECRET::"
+        },
+        {
+          "name": "SHOPIFY_API_SCOPES",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:SHOPIFY_API_SCOPES::"
+        },
+        {
+          "name": "SHOPIFY_APP_URL",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5"
+        },
+        {
+          "name": "SHOPIFY_API_VERSION",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:SHOPIFY_API_VERSION::"
+        },
+        {
+          "name": "MONGO_URL",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:MONGO_URL::"
+        },
+        {
+          "name": "ENCRYPTION_STRING",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:ENCRYPTION_STRING::"
+        },
+        {
+          "name": "NPM_CONFIG_FORCE",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:NPM_CONFIG_FORCE::"
+        },
+        {
+          "name": "VITE_SHOPIFY_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:VITE_SHOPIFY_API_KEY::"
+        },
+        {
+          "name": "APP_NAME",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:APP_NAME::"
+        },
+        {
+          "name": "APP_HANDLE",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:APP_HANDLE::"
+        },
+        {
+          "name": "APP_PROXY_PREFIX",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:APP_PROXY_PREFIX::"
+        },
+        {
+          "name": "APP_PROXY_SUBPATH",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5"
+        },
+        {
+          "name": "POS_EMBEDDED",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:POS_EMBEDDED::"
+        },
+        {
+          "name": "SQS_URL",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:SQS_URL::"
+        },
+        {
+          "name": "AWS_REGION",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:AWS_REGION::"
+        },
+        {
+          "name": "AWS_ACCESS_KEY_ID",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:AWS_ACCESS_KEY_ID::"
+        },
+        {
+          "name": "AWS_SECRET_KEY",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:AWS_SECRET_KEY::"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/node-ecs-app",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "systemControls": []
+    }
+  ],
+  "family": "node-ecs-task",
+  "taskRoleArn": "arn:aws:iam::476114140918:role/ecsTaskRole",
+  "executionRoleArn": "arn:aws:iam::476114140918:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 17,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "name": "ecs.capability.secrets.asm.environment-variables"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "ecs.capability.secrets.ssm.environment-variables"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2",
+    "MANAGED_INSTANCES",
+    "FARGATE"
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "registeredAt": "2026-01-21T13:34:00.193Z",
+  "registeredBy": "arn:aws:iam::476114140918:root",
+  "tags": []
 }
