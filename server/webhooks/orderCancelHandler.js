@@ -18,7 +18,7 @@ const orderCancelHandler = async (
   /** @type {webhookTopic} */
   const webhookBody = JSON.parse(webhookRequestBody);
   try {
-    await mapOrderCancelWebhook(shop, {...webhookBody,shop});
+    await mapOrderCancelWebhook(shop, { ...webhookBody, shop });
   } catch (err) {
     console.log(err.message);
   }

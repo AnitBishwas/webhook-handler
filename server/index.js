@@ -29,6 +29,9 @@ setupCheck(); // Run a check to ensure everything is setup properly
 
 const PORT = 8080;
 const isDev = process.env.NODE_ENV === "dev";
+console.log("PORT:", process.env.PORT);
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("ENCRYPTION_STRING exists:", !!process.env.ENCRYPTION_STRING);
 // MongoDB Connection
 const mongoUrl =
   process.env.MONGO_URL || "mongodb://127.0.0.1:27017/shopify-express-app";
@@ -40,7 +43,7 @@ const createServer = async (root = process.cwd()) => {
   app.disable("x-powered-by");
 
   // Health check route
-  app.get("/health",(req,res) => res.send('OK'));
+  app.get("/health", (req, res) => res.send("OK"));
   // Incoming webhook requests
   app.post(
     "/api/webhooks/*webhookTopic",
@@ -168,7 +171,7 @@ if (isDev) {
   createServer();
 } else {
   createServer().then(({ app }) => {
-    app.listen(PORT,'0.0.0.0', () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`--> Running on ${PORT}`);
     });
   });

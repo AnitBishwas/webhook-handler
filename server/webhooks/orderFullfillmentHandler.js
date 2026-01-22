@@ -18,7 +18,7 @@ const orderFullFillmentHandler = async (
   /** @type {webhookTopic} */
   const webhookBody = JSON.parse(webhookRequestBody);
   try {
-    await mapFulfillmentUpdateWebhook(shop, {...webhookBody,shop});
+    await mapFulfillmentUpdateWebhook(shop, { ...webhookBody, shop });
   } catch (err) {
     console.log(err.message);
   }

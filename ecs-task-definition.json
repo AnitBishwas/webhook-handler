@@ -17,15 +17,15 @@
         {
           "name": "NODE_ENV",
           "value": "production"
+        },
+        {
+            "name":"PORT",
+            "value":8080
         }
       ],
       "mountPoints": [],
       "volumesFrom": [],
       "secrets": [
-        {
-          "name": "PORT",
-          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:PORT::"
-        },
         {
           "name": "SHOPIFY_API_KEY",
           "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:SHOPIFY_API_KEY::"
@@ -40,7 +40,7 @@
         },
         {
           "name": "SHOPIFY_APP_URL",
-          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5"
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:SHOPIFY_APP_URL::"
         },
         {
           "name": "SHOPIFY_API_VERSION",
@@ -76,7 +76,7 @@
         },
         {
           "name": "APP_PROXY_SUBPATH",
-          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5"
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:476114140918:secret:webhook-handler-secrets-b21ad5:APP_PROXY_SUBPATH::"
         },
         {
           "name": "POS_EMBEDDED",
@@ -150,14 +150,8 @@
     }
   ],
   "placementConstraints": [],
-  "compatibilities": [
-    "EC2",
-    "MANAGED_INSTANCES",
-    "FARGATE"
-  ],
-  "requiresCompatibilities": [
-    "FARGATE"
-  ],
+  "compatibilities": ["EC2", "MANAGED_INSTANCES", "FARGATE"],
+  "requiresCompatibilities": ["FARGATE"],
   "cpu": "256",
   "memory": "512",
   "registeredAt": "2026-01-21T13:34:00.193Z",

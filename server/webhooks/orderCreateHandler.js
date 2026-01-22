@@ -18,7 +18,7 @@ const orderCreateHandler = async (
   /** @type {webhookTopic} */
   const webhookBody = JSON.parse(webhookRequestBody);
   try {
-    await mapOrderCreateWebhook(shop, {...webhookBody,shop});
+    await mapOrderCreateWebhook(shop, { ...webhookBody, shop });
   } catch (err) {
     console.log(err.message);
   }
