@@ -2,8 +2,6 @@ import { Session } from "@shopify/shopify-api";
 import Cryptr from "cryptr";
 import SessionModel from "./models/SessionModel.js";
 
-console.log("ENV check:", process.env);
-
 const cryption = new Cryptr(process.env.ENCRYPTION_STRING);
 
 /**

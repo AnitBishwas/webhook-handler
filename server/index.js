@@ -27,7 +27,7 @@ import webhookHandler from "./webhooks/_index.js";
 
 setupCheck(); // Run a check to ensure everything is setup properly
 
-const PORT = parseInt(process.env.PORT, 10) || 8081;
+const PORT = 8080;
 const isDev = process.env.NODE_ENV === "dev";
 // MongoDB Connection
 const mongoUrl =
