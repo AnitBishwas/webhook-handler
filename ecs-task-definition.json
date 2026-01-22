@@ -20,7 +20,7 @@
         },
         {
             "name":"PORT",
-            "value":8080
+            "value":"8080"
         }
       ],
       "mountPoints": [],
