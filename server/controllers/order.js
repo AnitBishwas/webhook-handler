@@ -30,9 +30,9 @@ const checkIfCashbackIsUtilisedForOrder = async (shop, orderId) => {
     if (errors && errors.length > 0) {
       throw new Error("Failed to make request");
     }
-    const isCashbackUtilised = data.order.transactions.find(
-      (el) => el.gateway == "cash_on_delivery"
-    );
+    const isCashbackUtilised =
+      data.order.transactions.find((el) => el.gateway == "Cashback") ||
+      process.env.NODE_ENV == "dev";
     return isCashbackUtilised;
   } catch (err) {
     console.log(err);

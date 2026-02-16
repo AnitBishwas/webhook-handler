@@ -1,14 +1,14 @@
-import { mapOrderCreateWebhook } from "../controllers/orderCreate.js";
+import { mapOrderRefundWebhook } from "../controllers/orderRefund.js";
 
 /**
  * @typedef { import("../../_developer/types/2025-04/webhooks.js").ORDERS_CREATE } webhookTopic
  */
 /**
  * SQS event payload
- * topic - [ORDER_CREATE]
+ * topic - [ORDER_REFUND,CASHBACK_REFUND]
  */
 
-const orderCreateHandler = async (
+const orderRefundHandler = async (
   topic,
   shop,
   webhookRequestBody,
@@ -18,11 +18,11 @@ const orderCreateHandler = async (
   /** @type {webhookTopic} */
   const webhookBody = JSON.parse(webhookRequestBody);
   try {
-    console.log("order create webhook triggered");
-    await mapOrderCreateWebhook(shop, { ...webhookBody, shop });
+    console.log("order refund webhook triggered");
+    await mapOrderRefundWebhook(shop, { ...webhookBody, shop });
   } catch (err) {
     console.log(err.message);
   }
 };
 
-export default orderCreateHandler;
+export default orderRefundHandler;

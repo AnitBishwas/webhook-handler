@@ -12,6 +12,7 @@ import appUninstallHandler from "./app_uninstalled.js";
 import orderCreateHandler from "./orderCreateHandler.js";
 import orderCancelHandler from "./orderCancelHandler.js";
 import orderFullFillmentHandler from "./orderFullfillmentHandler.js";
+import orderRefundHandler from "./orderRefundHandler.js";
 
 const webhookHandler = async (req, res) => {
   const topic = req.headers["x-shopify-topic"] || "";
@@ -50,6 +51,9 @@ const webhookHandler = async (req, res) => {
           webhookId,
           apiVersion
         );
+        break;
+      case "REFUNDS_CREATE":
+        await orderRefundHandler(topic, shop, req.body, webhookId, apiVersion);
         break;
       default:
         throw new Error(`Can't find a handler for ${validateWebhook.topic}`);

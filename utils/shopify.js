@@ -5,6 +5,7 @@ import appUninstallHandler from "../server/webhooks/app_uninstalled.js";
 import orderCreateHandler from "../server/webhooks/orderCreateHandler.js";
 import orderCancelHandler from "../server/webhooks/orderCancelHandler.js";
 import orderFullFillmentHandler from "../server/webhooks/orderFullfillmentHandler.js";
+import orderRefundHandler from "../server/webhooks/orderRefundHandler.js";
 
 const isDev = process.env.NODE_ENV === "dev";
 
@@ -53,6 +54,11 @@ shopify = {
         topics: ["fulfillments/update"],
         url: "/api/webhooks/fulfillments_update",
         callback: orderFullFillmentHandler,
+      },
+      {
+        topics: ["refunds/create"],
+        url: "/api/webhooks/refund_create",
+        callback: orderRefundHandler,
       },
     ],
 

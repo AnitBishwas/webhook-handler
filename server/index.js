@@ -27,8 +27,8 @@ import webhookHandler from "./webhooks/_index.js";
 
 setupCheck(); // Run a check to ensure everything is setup properly
 
-const PORT = 8080;
 const isDev = process.env.NODE_ENV === "dev";
+const PORT = isDev ? process.env.PORT || 8082 : 8080;
 console.log("PORT:", process.env.PORT);
 console.log("NODE_ENV:", process.env.NODE_ENV);
 console.log("ENCRYPTION_STRING exists:", !!process.env.ENCRYPTION_STRING);

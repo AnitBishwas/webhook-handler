@@ -41,7 +41,7 @@ proxyRouter.use("/test", async (req, res) => {
     }`;
     const variables = {
       fulfillmentEvent: {
-        fulfillmentId: "gid://shopify/Fulfillment/6534072271217",
+        fulfillmentId: "gid://shopify/Fulfillment/6596455956849",
         status: "DELIVERED",
       },
     };

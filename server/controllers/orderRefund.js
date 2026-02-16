@@ -4,16 +4,16 @@ import { sendWebhookFailureEventToDynamoDb } from "../aws/dynamoDB/index.js";
 
 /**
  * List of topics
- * ["ORDER_CANCEL","CASHBACK_CANCEL"]
+ * ["ORDER_REFUND","CASHBACK_REFUND"]
  * @param {!string} shop - shopify store handle Ex: swiss-local-dev.myshopify.com
  * @param {!object} payload - order pyaload
  */
-const mapOrderCancelWebhook = async (shop, payload) => {
+const mapOrderRefundWebhook = async (shop, payload) => {
   try {
-    console.log("order cancel was triggered");
+    console.log("order refund was triggered");
     const results = await Promise.allSettled([
-      sendOrderCancelEventToSQS(shop, payload),
-      sendCashbackCancelEventToSQS(shop, payload),
+      sendOrderRefundfEventToSQS(shop, payload),
+      sendCashbackRefundEventToSQS(shop, payload),
     ]);
     results.forEach(async (result, index) => {
       if (result.status === "rejected") {
@@ -36,13 +36,13 @@ const mapOrderCancelWebhook = async (shop, payload) => {
  * @param {!string} shop - shopify store handle Ex: swiss-local-dev.myshopify.com
  * @param {!object} payload - order payload
  */
-const sendOrderCancelEventToSQS = async (shop, payload) => {
+const sendOrderRefundfEventToSQS = async (shop, payload) => {
   try {
     if (!payload || !shop) {
       throw new Error("Payload and shop are required parameters");
     }
     return await sendToSQS({
-      topic: "ORDER_CANCEL",
+      topic: "ORDER_REFUND",
       shop,
       ...payload,
     });
@@ -54,7 +54,7 @@ const sendOrderCancelEventToSQS = async (shop, payload) => {
         code: err.code,
       },
       orderId: payload.id,
-      topic: "ORDER_CANCEL",
+      topic: "ORDER_REFUND",
     });
   }
 };
@@ -64,27 +64,33 @@ const sendOrderCancelEventToSQS = async (shop, payload) => {
  * @param {!string} shop - shopify store handle Ex: swiss-local-dev.myshopify.com
  * @param {!object} payload - order payload
  */
-const sendCashbackCancelEventToSQS = async (shop, payload) => {
+const sendCashbackRefundEventToSQS = async (shop, payload) => {
   try {
     if (!payload || !shop) {
       throw new Error("Payload and shop are required parameters");
     }
-    return await sendToSQS({
-      topic: "CASHBACK_CANCEL",
-      shop,
-      ...payload,
-    });
+    const checkIfCashbackRefundWasMade =
+      payload.transactions.find(
+        (el) => el.kind == "refund" && el.gateway == "Cashback"
+      ) || process.env.NODE_ENV == "dev";
+    if (checkIfCashbackRefundWasMade) {
+      return await sendToSQS({
+        topic: "CASHBACK_REFUND",
+        shop,
+        ...payload,
+      });
+    }
   } catch (err) {
     throw new WebhookTaskError({
-      message: "Failed to send cashback cancel event to SQS",
+      message: "Failed to send cashback refund event to SQS",
       originalError: {
         message: err.message,
         code: err.code,
       },
       orderId: payload.id,
-      topic: "CASHBACK_CANCEL",
+      topic: "CASHBACK_REFUND",
     });
   }
 };
 
-export { mapOrderCancelWebhook };
+export { mapOrderRefundWebhook };
