@@ -11,45 +11,36 @@ import { sendToSQS } from "../aws/sqs/index.js";
  */
 const mapFulfillmentUpdateWebhook = async (shop, payload) => {
   try {
-    console.dir({
-      message:'mapping fulfillment handler here',
-      payload
-    },{
-      depth: null
-    })
-    const checkIfOrderIsAlreadyMarkedDelivered =
-      await DeliveredOrderModel.findOneAndUpdate(
-        { orderId: payload.order_id },
-        {
-          $setOnInsert: { orderId: payload.order_id },
-        },
-        { upsert: true, new: false }
-      );
-    const checkIfOrderHasDeliveredStatus =
-      payload.shipment_status == "delivered";
-    if (
-      !checkIfOrderIsAlreadyMarkedDelivered &&
-      checkIfOrderHasDeliveredStatus
-    ) {
-      await DeliveredOrderModel.create([
-        {
-          orderId: payload.order_id,
-        },
-      ]);
-      const results = await Promise.allSettled([
-        sendOrderDeliveredEventToSQS(shop, payload),
-        sendCashbackAssignEventToSQS(shop, payload),
-      ]);
-      results.forEach(async (result, index) => {
-        if (result.status === "rejected") {
-          const failedWebhook = await sendWebhookFailureEventToDynamoDb({
-            orderId: result.reason.orderId,
-            topic: result.reason.topic,
-            result,
-          });
-          console.error(`Failed to handle topic ${result.reason.topic}`);
-        }
-      });
+    console.dir({ message: "mapping fulfillment handler here", payload }, { depth: null });
+
+    const status = String(payload?.shipment_status || "").toLowerCase();
+    if (status !== "delivered") return;
+
+    const orderId = payload.order_id;
+
+    const res = await DeliveredOrderModel.findOneAndUpdate(
+      { orderId },
+      { $setOnInsert: { orderId } },
+      { upsert: true, new: false, rawResult: true }
+    );
+
+    const alreadyExisted = !!res?.lastErrorObject?.updatedExisting;
+    if (alreadyExisted) return;
+
+    const results = await Promise.allSettled([
+      sendOrderDeliveredEventToSQS(shop, payload),
+      sendCashbackAssignEventToSQS(shop, payload),
+    ]);
+
+    for (const r of results) {
+      if (r.status === "rejected") {
+        await sendWebhookFailureEventToDynamoDb({
+          orderId: r.reason?.orderId ?? orderId,
+          topic: r.reason?.topic ?? "unknown",
+          result: r,
+        });
+        console.error(`Failed to handle topic ${r.reason?.topic}`);
+      }
     }
   } catch (err) {
     throw new Error(
@@ -57,6 +48,7 @@ const mapFulfillmentUpdateWebhook = async (shop, payload) => {
     );
   }
 };
+
 
 /**
  *
