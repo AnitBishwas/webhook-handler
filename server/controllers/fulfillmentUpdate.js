@@ -11,6 +11,12 @@ import { sendToSQS } from "../aws/sqs/index.js";
  */
 const mapFulfillmentUpdateWebhook = async (shop, payload) => {
   try {
+    console.dir({
+      message:'mapping fulfillment handler here',
+      payload
+    },{
+      depth: null
+    })
     const checkIfOrderIsAlreadyMarkedDelivered =
       await DeliveredOrderModel.findOneAndUpdate(
         { orderId: payload.order_id },
